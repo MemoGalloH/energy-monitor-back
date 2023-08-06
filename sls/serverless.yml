@@ -1,0 +1,80 @@
+service: energy-monitor
+
+frameworkVersion: ^3.26.0
+
+plugins:
+  - serverless-prune-plugin
+  - serverless-python-requirements
+
+provider:
+  name: aws
+  runtime: python3.9
+
+  region: ${file(./../ci/variables.js):AWS_REGION}
+  stage: ${file(./../ci/variables.js):AWS_STAGE}
+  profile: ${file(./../ci/variables.js):PROFILE}
+
+  environment:
+    CLIENT_GROUP_MONITOR_TABLE_NAME: ${self:custom.clientGroupMonitorTableName}
+  iam:
+    role:
+      statements: ${file(./iam/statements.yml):statements}
+
+  httpApi:
+    cors:
+      allowedOrigins:
+        - "*"
+      allowedHeaders:
+        - Access-Control-Allow-Headers
+        - Origin
+        - Accept
+        - X-Requested-With
+        - Content-Type
+        - Access-Control-Request-Method
+        - Access-Control-Request-Headers
+        - Authorization
+      allowedMethods:
+        - GET
+        - HEAD
+        - OPTIONS
+        - POST
+        - PUT
+        - DELETE
+      exposedResponseHeaders:
+        - Special-Response-Header
+      maxAge: 6000 # In seconds
+
+package: 
+  patterns:
+    - '!./**'
+    - './../src/**'
+
+functions:
+  meterEndpoint:
+    name: ${self:custom.prefix}-meterEndpoint
+    handler: src/functions/meter_endpoint.lambda_handler
+    events:
+      - httpApi:
+          path: /monitor/{monitor_id}
+          method: post
+    layers:
+      - !Ref PythonRequirementsLambdaLayer
+
+resources:
+  - ${file(./resources/tables.yml)}
+
+custom:
+  prefix: ${self:service}-${self:provider.stage}
+  clientGroupMonitorTableName: ${self:custom.prefix}-ClientGroupMonitorTable
+  prune:
+    automatic: true
+    includeLayers: true
+    number: 5
+  pythonRequirements:
+    fileName: ./../requirements.txt
+    dockerizePip: true
+    slim: true
+    layer:
+      name: ${self:custom.prefix}-python-packages
+      compatibleRuntimes:
+        - ${self:provider.runtime}

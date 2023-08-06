@@ -1,0 +1,17 @@
+safeguards: 
+    - safeguard: framework-version
+      enforcementLevel: warning
+      config: ^3.26.0
+    - safeguard: allowed-runtimes
+      config:
+        - python3.9
+    - safeguard: allowed-regions
+      config:
+        - us-east-1
+    - safeguard: no-wild-iam-role-statements
+    - safeguard: allowed-function-names
+      enforcementLevel: warning
+      config: ${SERVICE}-${STAGE}-${FUNCTION}
+    - safeguard: require-dlq
+    - safeguard: service-naming-convention
+      path: ./../ci/

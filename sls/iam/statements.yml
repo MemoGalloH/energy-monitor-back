@@ -1,0 +1,8 @@
+statements:
+  - Effect: Allow
+    Action:
+      - dynamodb:GetItem
+      - dynamodb:GetItem
+      - dynamodb:UpdateItem
+      - dynamodb:DeleteItem
+    Resource: arn:aws:dynamodb:${self:provider.region}:${aws:accountId}:table/*
