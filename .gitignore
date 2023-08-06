@@ -1,0 +1,32 @@
+# Distribution / packaging
+.Python
+.venv
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+.pytest_cache/
+
+# Serverless directories
+node_modules
+.serverless
+resultado.json
+
+# Other files
+sender_copy_item.py
+Validation.py
+results.json
+myvenv
+.venv
+venv

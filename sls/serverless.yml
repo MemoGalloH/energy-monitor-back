@@ -3,6 +3,7 @@ service: energy-monitor
 frameworkVersion: ^3.26.0
 
 plugins:
+  - serverless-ignore
   - serverless-prune-plugin
   - serverless-python-requirements
 
