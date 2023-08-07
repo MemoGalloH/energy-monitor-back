@@ -243,7 +243,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/energy-monitor/dev/1691413398087-2023-08-07T13:03:18.087Z/energy-monitor.zip"
+                "S3Key": "serverless/energy-monitor/dev/1691419672347-2023-08-07T14:47:52.347Z/energy-monitor.zip"
               },
               "Handler": "src/functions/meter_endpoint.lambda_handler",
               "Runtime": "python3.9",
@@ -272,14 +272,14 @@
               "MeterEndpointLogGroup"
             ]
           },
-          "MeterEndpointLambdaVersionCKJ7QCqmYQl4e9OeOudFywk8H1pitzOWHN7QMSf5FPM": {
+          "MeterEndpointLambdaVersionem17b6LA1yT9tzB7tCpLR1GltYy6gZ8dqOPqmOL62c": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "MeterEndpointLambdaFunction"
               },
-              "CodeSha256": "m1sdh3P90RVe6hFgU275V7mVI4463rpWKUqi2gR/Mzk="
+              "CodeSha256": "9Ye2Wdb8RLsaVZeDOEJlNbne5WnwoRBLpEOWGs6nOlo="
             }
           },
           "HttpApi": {
@@ -464,7 +464,7 @@
           "MeterEndpointLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "MeterEndpointLambdaVersionCKJ7QCqmYQl4e9OeOudFywk8H1pitzOWHN7QMSf5FPM"
+              "Ref": "MeterEndpointLambdaVersionem17b6LA1yT9tzB7tCpLR1GltYy6gZ8dqOPqmOL62c"
             },
             "Export": {
               "Name": "sls-energy-monitor-dev-MeterEndpointLambdaFunctionQualifiedArn"
@@ -639,7 +639,7 @@
         "timeout": 6,
         "runtime": "python3.9",
         "vpc": {},
-        "versionLogicalId": "MeterEndpointLambdaVersionCKJ7QCqmYQl4e9OeOudFywk8H1pitzOWHN7QMSf5FPM"
+        "versionLogicalId": "MeterEndpointLambdaVersionem17b6LA1yT9tzB7tCpLR1GltYy6gZ8dqOPqmOL62c"
       }
     },
     "resources": {
@@ -706,7 +706,7 @@
           "variables.js"
         ],
         "artifact": "/home/guillermo/Desktop/GaGaIoT/BackEnd/energy-monitor-back/sls/.serverless/energy-monitor.zip",
-        "artifactDirectoryName": "serverless/energy-monitor/dev/1691413398087-2023-08-07T13:03:18.087Z"
+        "artifactDirectoryName": "serverless/energy-monitor/dev/1691419672347-2023-08-07T14:47:52.347Z"
       },
       "functions": {
         "$ref": "$[\"service\"][\"functions\"]"
@@ -734,7 +734,7 @@
     "artifact": "/home/guillermo/Desktop/GaGaIoT/BackEnd/energy-monitor-back/sls/.serverless/energy-monitor.zip"
   },
   "package": {
-    "artifactDirectoryName": "serverless/energy-monitor/dev/1691413398087-2023-08-07T13:03:18.087Z",
+    "artifactDirectoryName": "serverless/energy-monitor/dev/1691419672347-2023-08-07T14:47:52.347Z",
     "artifact": "energy-monitor.zip"
   }
 }
