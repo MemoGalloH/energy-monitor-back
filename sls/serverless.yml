@@ -16,6 +16,7 @@ provider:
   profile: ${file(./../ci/variables.js):PROFILE}
 
   environment:
+    LOG_LEVEL: ${self:custom.logLevel}
     CLIENT_GROUP_MONITOR_TABLE_NAME: ${self:custom.clientGroupMonitorTableName}
   iam:
     role:
@@ -66,6 +67,7 @@ resources:
 
 custom:
   prefix: ${self:service}-${self:provider.stage}
+  logLevel: ${file(./../ci/variables.js):LOG_LEVEL}
   clientGroupMonitorTableName: ${self:custom.prefix}-ClientGroupMonitorTable
   prune:
     automatic: true

@@ -188,7 +188,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/energy-monitor/dev/1691337830111-2023-08-06T16:03:50.111Z/energy-monitor.zip"
+          "S3Key": "serverless/energy-monitor/dev/1691383408192-2023-08-07T04:43:28.192Z/energy-monitor.zip"
         },
         "Handler": "src/functions/meter_endpoint.lambda_handler",
         "Runtime": "python3.9",
@@ -197,6 +197,7 @@
         "Timeout": 6,
         "Environment": {
           "Variables": {
+            "LOG_LEVEL": "DEBUG",
             "CLIENT_GROUP_MONITOR_TABLE_NAME": "energy-monitor-dev-ClientGroupMonitorTable"
           }
         },
@@ -216,14 +217,14 @@
         "MeterEndpointLogGroup"
       ]
     },
-    "MeterEndpointLambdaVersionpQ4GJ6VdzHgNw4KyCKfymlumVmqMnqG7JiTQ8jyhrek": {
+    "MeterEndpointLambdaVersionjoCeNFoqEqB7YoHu4WPzcaDzp2v6jWaL4gqOEqomSs": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "MeterEndpointLambdaFunction"
         },
-        "CodeSha256": "/6srto4Eg3T/DTETXHvYxGpJ15C+yqHKSc5zpqjNUbs="
+        "CodeSha256": "obFynsgQ2m85H9cpvw9F6dfDFEiDa8goSt2QdCWzX00="
       }
     },
     "HttpApi": {
@@ -411,7 +412,7 @@
     "MeterEndpointLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "MeterEndpointLambdaVersionpQ4GJ6VdzHgNw4KyCKfymlumVmqMnqG7JiTQ8jyhrek"
+        "Ref": "MeterEndpointLambdaVersionjoCeNFoqEqB7YoHu4WPzcaDzp2v6jWaL4gqOEqomSs"
       },
       "Export": {
         "Name": "sls-energy-monitor-dev-MeterEndpointLambdaFunctionQualifiedArn"
