@@ -1,16 +1,16 @@
 import logging
 
 
-class dynamoHandler:
+class DynamoHandler:
     def __init__(self, dynamo_table_ref):
         self.table = dynamo_table_ref
 
-    def get_item(self, clien_id, client_group_monitor_id):
+    def get_item(self, client_id, client_group_monitor_id):
         try:
             logging.debug("Getting dynamo Item")
             response = self.table.get_item(
                 Key={
-                    "clientId": clien_id,
+                    "clientId": client_id,
                     "clientGroupMonitorId": client_group_monitor_id,
                 }
             )
