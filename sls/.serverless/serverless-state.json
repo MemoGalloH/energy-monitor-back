@@ -139,6 +139,12 @@
               "LogGroupName": "/aws/lambda/energy-monitor-dev-meterEndpoint"
             }
           },
+          "GetTableItemEndpointLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/energy-monitor-dev-getTableItemEndpoint"
+            }
+          },
           "IamRoleLambdaExecution": {
             "Type": "AWS::IAM::Role",
             "Properties": {
@@ -243,7 +249,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/energy-monitor/dev/1691461082787-2023-08-08T02:18:02.787Z/energy-monitor.zip"
+                "S3Key": "serverless/energy-monitor/dev/1691533158709-2023-08-08T22:19:18.709Z/energy-monitor.zip"
               },
               "Handler": "src/functions/meter_endpoint.lambda_handler",
               "Runtime": "python3.9",
@@ -272,14 +278,60 @@
               "MeterEndpointLogGroup"
             ]
           },
-          "MeterEndpointLambdaVersionTWZVqY3HBpzcCahlK0LW4k3eBZQHlfbIInemzehVpDk": {
+          "GetTableItemEndpointLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": {
+                  "Ref": "ServerlessDeploymentBucket"
+                },
+                "S3Key": "serverless/energy-monitor/dev/1691533158709-2023-08-08T22:19:18.709Z/energy-monitor.zip"
+              },
+              "Handler": "src/functions/get_table_item_endpoint.lambda_handler",
+              "Runtime": "python3.9",
+              "FunctionName": "energy-monitor-dev-getTableItemEndpoint",
+              "MemorySize": 1024,
+              "Timeout": 6,
+              "Environment": {
+                "Variables": {
+                  "LOG_LEVEL": "DEBUG",
+                  "CLIENT_GROUP_MONITOR_TABLE_NAME": "energy-monitor-dev-ClientGroupMonitorTable"
+                }
+              },
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              },
+              "Layers": [
+                {
+                  "Ref": "PythonRequirementsLambdaLayer"
+                }
+              ]
+            },
+            "DependsOn": [
+              "GetTableItemEndpointLogGroup"
+            ]
+          },
+          "MeterEndpointLambdaVersionlJjrOYOv6OcEGpwnTxPz7aAvjQhIJwwD074aUmis": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "MeterEndpointLambdaFunction"
               },
-              "CodeSha256": "KO5120RptXmufZWBqySyj+b9kuJQrYjh9Qirt+3VWjE="
+              "CodeSha256": "q9Ef9tzcFlXhSmJSNsM+LqKT1nudb/2tk0oRdFIDHgg="
+            }
+          },
+          "GetTableItemEndpointLambdaVersionXjrusso5Sn1PbJ2idv4Y2rLwF1OytIdtOGemWIBMc": {
+            "Type": "AWS::Lambda::Version",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "GetTableItemEndpointLambdaFunction"
+              },
+              "CodeSha256": "q9Ef9tzcFlXhSmJSNsM+LqKT1nudb/2tk0oRdFIDHgg="
             }
           },
           "HttpApi": {
@@ -386,7 +438,7 @@
               "ApiId": {
                 "Ref": "HttpApi"
               },
-              "RouteKey": "POST /monitor/{monitor_id}",
+              "RouteKey": "POST /monitor/{monitorId}",
               "Target": {
                 "Fn::Join": [
                   "/",
@@ -400,6 +452,78 @@
               }
             },
             "DependsOn": "HttpApiIntegrationMeterEndpoint"
+          },
+          "GetTableItemEndpointLambdaPermissionHttpApi": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "GetTableItemEndpointLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": "apigateway.amazonaws.com",
+              "SourceArn": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":execute-api:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":",
+                    {
+                      "Ref": "HttpApi"
+                    },
+                    "/*"
+                  ]
+                ]
+              }
+            }
+          },
+          "HttpApiIntegrationGetTableItemEndpoint": {
+            "Type": "AWS::ApiGatewayV2::Integration",
+            "Properties": {
+              "ApiId": {
+                "Ref": "HttpApi"
+              },
+              "IntegrationType": "AWS_PROXY",
+              "IntegrationUri": {
+                "$ref": "$[\"service\"][\"provider\"][\"compiledCloudFormationTemplate\"][\"Resources\"][\"GetTableItemEndpointLambdaPermissionHttpApi\"][\"Properties\"][\"FunctionName\"]"
+              },
+              "PayloadFormatVersion": "2.0",
+              "TimeoutInMillis": 30000
+            }
+          },
+          "HttpApiRouteGetClientClientidVarClientgroupmonitoridVar": {
+            "Type": "AWS::ApiGatewayV2::Route",
+            "Properties": {
+              "ApiId": {
+                "Ref": "HttpApi"
+              },
+              "RouteKey": "GET /client/{clientId}/{clientGroupMonitorId}",
+              "Target": {
+                "Fn::Join": [
+                  "/",
+                  [
+                    "integrations",
+                    {
+                      "Ref": "HttpApiIntegrationGetTableItemEndpoint"
+                    }
+                  ]
+                ]
+              }
+            },
+            "DependsOn": "HttpApiIntegrationGetTableItemEndpoint"
           },
           "ClientGroupMonitorTable": {
             "Type": "AWS::DynamoDB::Table",
@@ -464,10 +588,19 @@
           "MeterEndpointLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "MeterEndpointLambdaVersionTWZVqY3HBpzcCahlK0LW4k3eBZQHlfbIInemzehVpDk"
+              "Ref": "MeterEndpointLambdaVersionlJjrOYOv6OcEGpwnTxPz7aAvjQhIJwwD074aUmis"
             },
             "Export": {
               "Name": "sls-energy-monitor-dev-MeterEndpointLambdaFunctionQualifiedArn"
+            }
+          },
+          "GetTableItemEndpointLambdaFunctionQualifiedArn": {
+            "Description": "Current Lambda function version",
+            "Value": {
+              "Ref": "GetTableItemEndpointLambdaVersionXjrusso5Sn1PbJ2idv4Y2rLwF1OytIdtOGemWIBMc"
+            },
+            "Export": {
+              "Name": "sls-energy-monitor-dev-GetTableItemEndpointLambdaFunctionQualifiedArn"
             }
           },
           "HttpApiId": {
@@ -624,11 +757,11 @@
         "events": [
           {
             "httpApi": {
-              "path": "/monitor/{monitor_id}",
+              "path": "/monitor/{monitorId}",
               "method": "post"
             },
             "resolvedMethod": "POST",
-            "resolvedPath": "/monitor/{monitor_id}"
+            "resolvedPath": "/monitor/{monitorId}"
           }
         ],
         "layers": {
@@ -639,7 +772,30 @@
         "timeout": 6,
         "runtime": "python3.9",
         "vpc": {},
-        "versionLogicalId": "MeterEndpointLambdaVersionTWZVqY3HBpzcCahlK0LW4k3eBZQHlfbIInemzehVpDk"
+        "versionLogicalId": "MeterEndpointLambdaVersionlJjrOYOv6OcEGpwnTxPz7aAvjQhIJwwD074aUmis"
+      },
+      "getTableItemEndpoint": {
+        "name": "energy-monitor-dev-getTableItemEndpoint",
+        "handler": "src/functions/get_table_item_endpoint.lambda_handler",
+        "events": [
+          {
+            "httpApi": {
+              "path": "/client/{clientId}/{clientGroupMonitorId}",
+              "method": "get"
+            },
+            "resolvedMethod": "GET",
+            "resolvedPath": "/client/{clientId}/{clientGroupMonitorId}"
+          }
+        ],
+        "layers": {
+          "$ref": "$[\"service\"][\"provider\"][\"compiledCloudFormationTemplate\"][\"Resources\"][\"GetTableItemEndpointLambdaFunction\"][\"Properties\"][\"Layers\"]"
+        },
+        "package": {},
+        "memory": 1024,
+        "timeout": 6,
+        "runtime": "python3.9",
+        "vpc": {},
+        "versionLogicalId": "GetTableItemEndpointLambdaVersionXjrusso5Sn1PbJ2idv4Y2rLwF1OytIdtOGemWIBMc"
       }
     },
     "resources": {
@@ -706,7 +862,7 @@
           "variables.js"
         ],
         "artifact": "/home/guillermo/Desktop/GaGaIoT/BackEnd/energy-monitor-back/sls/.serverless/energy-monitor.zip",
-        "artifactDirectoryName": "serverless/energy-monitor/dev/1691461082787-2023-08-08T02:18:02.787Z"
+        "artifactDirectoryName": "serverless/energy-monitor/dev/1691533158709-2023-08-08T22:19:18.709Z"
       },
       "functions": {
         "$ref": "$[\"service\"][\"functions\"]"
@@ -734,7 +890,7 @@
     "artifact": "/home/guillermo/Desktop/GaGaIoT/BackEnd/energy-monitor-back/sls/.serverless/energy-monitor.zip"
   },
   "package": {
-    "artifactDirectoryName": "serverless/energy-monitor/dev/1691461082787-2023-08-08T02:18:02.787Z",
+    "artifactDirectoryName": "serverless/energy-monitor/dev/1691533158709-2023-08-08T22:19:18.709Z",
     "artifact": "energy-monitor.zip"
   }
 }

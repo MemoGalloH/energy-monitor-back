@@ -3,10 +3,9 @@ import logging
 import traceback
 import boto3
 from src.utils.logging_utils import get_log_level
-from src.utils.parsing_utils import parse_input_measure
+from src.utils.parsing_utils import parse_get_item_client_table
 from src.repositories.dynamo_handler import DynamoHandler
-from src.use_cases.post_new_measure import PostNewMeasure
-from src.data_structures.client_group_monitor import ClientGroupMonitor
+from src.use_cases.get_item_client_table import GetItemClientTable
 
 CLIENT_GROUP_MONITOR_TABLE_NAME = os.environ["CLIENT_GROUP_MONITOR_TABLE_NAME"]
 CLIENT = boto3.resource("dynamodb")
@@ -17,17 +16,12 @@ logging.getLogger().setLevel(LOG_LEVEL)
 
 
 def lambda_handler(event, _):
-    """body = {
-        "clientId": String,
-        "groupId": String,
-        "data": List[float],
-    }"""
     try:
         logging.debug(event)
-        client_Ids = parse_input_measure(event)
+        client_Id, client_group_monitor_id = parse_get_item_client_table(event)
         dynamo_handler = DynamoHandler(CLIENT_GROUP_MONITOR_TABLE)
-        use_case = PostNewMeasure(dynamo_handler)
-        response = use_case.execute(client_Ids)
+        use_case = GetItemClientTable(dynamo_handler)
+        response = use_case.execute(client_Id, client_group_monitor_id)
     except Exception as e:
         traceback.print_exc()
         logging.error(e)

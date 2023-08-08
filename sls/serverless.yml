@@ -52,13 +52,24 @@ package:
     - './../src/**'
 
 functions:
+
   meterEndpoint:
     name: ${self:custom.prefix}-meterEndpoint
     handler: src/functions/meter_endpoint.lambda_handler
     events:
       - httpApi:
-          path: /monitor/{monitor_id}
+          path: /monitor/{monitorId}
           method: post
+    layers:
+      - !Ref PythonRequirementsLambdaLayer
+
+  getTableItemEndpoint:
+    name: ${self:custom.prefix}-getTableItemEndpoint
+    handler: src/functions/get_table_item_endpoint.lambda_handler
+    events:
+      - httpApi:
+          path: /client/{clientId}/{clientGroupMonitorId}
+          method: get
     layers:
       - !Ref PythonRequirementsLambdaLayer
 

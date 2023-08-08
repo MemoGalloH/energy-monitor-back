@@ -1,7 +1,6 @@
 from src.repositories.dynamo_handler import DynamoHandler
 from src.utils.company_ascii_art import COMPANY_ASCII_ART
 from src.data_structures.client_group_monitor import ClientGroupMonitor
-from src.data_structures.custom_exceptions import ProcessError
 import traceback
 import logging
 
