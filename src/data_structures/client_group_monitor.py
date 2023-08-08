@@ -17,3 +17,32 @@ class ClientGroupMonitor:
 
     def get_monitor_ref(self):
         return f"{self.group_id}.{self.monitor_id}"
+
+
+@dataclass
+class MonitorItem:
+    clientId: str = None
+    clientGroupMonitorId: str = None
+    variables: List = field(default_factory=list)
+    measures: List = field(default_factory=list)
+    isActive: bool = None
+
+
+@dataclass
+class GroupItem:
+    clientId: str = None
+    clientGroupMonitorId: str = None
+    isActive: bool = None
+    monitors: List = field(default_factory=list)
+
+
+@dataclass
+class ClientItem:
+    clientId: str = None
+    clientGroupMonitorId: str = None
+    isActive: bool = None
+    name: str = None
+    lastName: str = None
+    email: str = None
+    phone: str = None
+    groups: List = field(default_factory=list)

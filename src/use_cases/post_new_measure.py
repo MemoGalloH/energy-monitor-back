@@ -13,10 +13,8 @@ class PostNewMeasure:
     def execute(self, data: ClientGroupMonitor):
         try:
             logging.debug(data)
-            response = self.dynamo_handler.put_new_measure(data)
-            logging.debug(response)
-            status_code = 200
-            body = COMPANY_ASCII_ART
+            status_code, body = self.dynamo_handler.put_new_measure(data)
+            logging.debug((status_code, body))
         except Exception as e:
             traceback.print_exc()
             status_code = 500

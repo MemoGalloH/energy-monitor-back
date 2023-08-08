@@ -17,7 +17,7 @@
     "clientId": "1053779590",
     "clientGroupMonitorId": "74f9ae48-36ce-4b4e-bdd3-3899fa886b02",
     "isActive": true,
-    "Monitors":[
+    "monitors":[
         {"monitorId": "796b2cc2-b848-4e16-bf17-ff506b5d0602",
         "name":"Monitor prueba",
         "entryDate":"2023-08-06"}
@@ -26,7 +26,7 @@
    {
     "clientId": "1053779590",
     "clientGroupMonitorId": "74f9ae48-36ce-4b4e-bdd3-3899fa886b02.796b2cc2-b848-4e16-bf17-ff506b5d0602",
-    "variables": ["ea_t", "v_a", "v_b", "v_c", "i_a", "i_b", "i_c"],
+    "variables": ["EA_T_I", "V_A", "V_B", "V_C", "I_A", "I_B", "I_C"],
     "measures": [{"values": [20.5, 120.34, 117.28, 121.43, 300.33, 304.33, 302.33],
                  "timestamp": 1691377178}],
     "isActive": true
