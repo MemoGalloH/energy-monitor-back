@@ -22,30 +22,6 @@ provider:
     role:
       statements: ${file(./iam/statements.yml):statements}
 
-  httpApi:
-    cors:
-      allowedOrigins:
-        - "*"
-      allowedHeaders:
-        - Access-Control-Allow-Headers
-        - Origin
-        - Accept
-        - X-Requested-With
-        - Content-Type
-        - Access-Control-Request-Method
-        - Access-Control-Request-Headers
-        - Authorization
-      allowedMethods:
-        - GET
-        - HEAD
-        - OPTIONS
-        - POST
-        - PUT
-        - DELETE
-      exposedResponseHeaders:
-        - Special-Response-Header
-      maxAge: 6000 # In seconds
-
 package: 
   patterns:
     - '!./**'
