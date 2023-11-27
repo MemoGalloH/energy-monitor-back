@@ -26,4 +26,10 @@ def lambda_handler(event, _):
         traceback.print_exc()
         logging.error(e)
         return {"statusCode": 500, "body": str(e)}
-    return {"statusCode": response["status_code"], "body": response["body"]}
+    return {
+        "statusCode": response["status_code"],
+        "headers": {
+            "Access-Control-Allow-Origin": "*",
+        },
+        "body": response["body"],
+    }
