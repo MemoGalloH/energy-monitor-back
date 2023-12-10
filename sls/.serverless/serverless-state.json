@@ -11,6 +11,9 @@
       "stage": "dev",
       "profile": "default",
       "environment": {
+        "REGION_NAME": "us-west-2",
+        "TIMESTREAM_MEASURES_TABLE": "energy-monitor-dev-measuresTable",
+        "TIMESTREAM_DB": "energy-monitor-dev-measuresDB",
         "LOG_LEVEL": "DEBUG",
         "CLIENT_GROUP_MONITOR_TABLE_NAME": "energy-monitor-dev-ClientGroupMonitorTable"
       },
@@ -26,6 +29,25 @@
                 "dynamodb:DeleteItem"
               ],
               "Resource": "arn:aws:dynamodb:us-west-2:904761646712:table/*"
+            },
+            {
+              "Effect": "Allow",
+              "Action": [
+                "timestream:WriteRecords"
+              ],
+              "Resource": [
+                "arn:aws:timestream:us-west-2:904761646712:database/energy-monitor-dev-measuresDB",
+                "arn:aws:timestream:us-west-2:904761646712:database/energy-monitor-dev-measuresDB/*"
+              ]
+            },
+            {
+              "Effect": "Allow",
+              "Action": [
+                "timestream:DescribeEndpoints"
+              ],
+              "Resource": [
+                "*"
+              ]
             }
           ]
         }
@@ -176,6 +198,12 @@
                       },
                       {
                         "$ref": "$[\"service\"][\"provider\"][\"iam\"][\"role\"][\"statements\"][0]"
+                      },
+                      {
+                        "$ref": "$[\"service\"][\"provider\"][\"iam\"][\"role\"][\"statements\"][1]"
+                      },
+                      {
+                        "$ref": "$[\"service\"][\"provider\"][\"iam\"][\"role\"][\"statements\"][2]"
                       }
                     ]
                   }
@@ -220,7 +248,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/energy-monitor/dev/1694126156524-2023-09-07T22:35:56.524Z/energy-monitor.zip"
+                "S3Key": "serverless/energy-monitor/dev/1702242722209-2023-12-10T21:12:02.209Z/energy-monitor.zip"
               },
               "Handler": "src/functions/meter_endpoint.lambda_handler",
               "Runtime": "python3.9",
@@ -229,6 +257,9 @@
               "Timeout": 6,
               "Environment": {
                 "Variables": {
+                  "REGION_NAME": "us-west-2",
+                  "TIMESTREAM_MEASURES_TABLE": "energy-monitor-dev-measuresTable",
+                  "TIMESTREAM_DB": "energy-monitor-dev-measuresDB",
                   "LOG_LEVEL": "DEBUG",
                   "CLIENT_GROUP_MONITOR_TABLE_NAME": "energy-monitor-dev-ClientGroupMonitorTable"
                 }
@@ -256,7 +287,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/energy-monitor/dev/1694126156524-2023-09-07T22:35:56.524Z/energy-monitor.zip"
+                "S3Key": "serverless/energy-monitor/dev/1702242722209-2023-12-10T21:12:02.209Z/energy-monitor.zip"
               },
               "Handler": "src/functions/get_table_item_endpoint.lambda_handler",
               "Runtime": "python3.9",
@@ -265,6 +296,9 @@
               "Timeout": 6,
               "Environment": {
                 "Variables": {
+                  "REGION_NAME": "us-west-2",
+                  "TIMESTREAM_MEASURES_TABLE": "energy-monitor-dev-measuresTable",
+                  "TIMESTREAM_DB": "energy-monitor-dev-measuresDB",
                   "LOG_LEVEL": "DEBUG",
                   "CLIENT_GROUP_MONITOR_TABLE_NAME": "energy-monitor-dev-ClientGroupMonitorTable"
                 }
@@ -285,24 +319,24 @@
               "GetTableItemEndpointLogGroup"
             ]
           },
-          "MeterEndpointLambdaVersionS7jHRlE95XdV7V86fgLVDfaCHlOZ3ABy1NARgFsM3g": {
+          "MeterEndpointLambdaVersion9bOE9OyIipcD5S6f6MpK3lpI6vzpijdB72gi3zlrKhM": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "MeterEndpointLambdaFunction"
               },
-              "CodeSha256": "w7Bm2/n+FIQk64sJSKUasE1T3LuaK7HrV4BpSIyexuw="
+              "CodeSha256": "tiqFYjNBrw4LPn1e3a5XVCEe4C2UWgO4ieH+Lt78wzI="
             }
           },
-          "GetTableItemEndpointLambdaVersionExMZVLIzFL7IWHSqdDcJsngX6zPjTMK2kIeF06X60qQ": {
+          "GetTableItemEndpointLambdaVersion0mKmG13845e39pmuncie87Ib92pHmRwWaq07O85fpc": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "GetTableItemEndpointLambdaFunction"
               },
-              "CodeSha256": "w7Bm2/n+FIQk64sJSKUasE1T3LuaK7HrV4BpSIyexuw="
+              "CodeSha256": "tiqFYjNBrw4LPn1e3a5XVCEe4C2UWgO4ieH+Lt78wzI="
             }
           },
           "HttpApi": {
@@ -495,6 +529,25 @@
               "BillingMode": "PAY_PER_REQUEST",
               "TableName": "energy-monitor-dev-ClientGroupMonitorTable"
             }
+          },
+          "MeasuresDatabase": {
+            "Type": "AWS::Timestream::Database",
+            "Properties": {
+              "DatabaseName": "energy-monitor-dev-measuresDB"
+            }
+          },
+          "MeasuresTable": {
+            "Type": "AWS::Timestream::Table",
+            "Properties": {
+              "DatabaseName": {
+                "Ref": "MeasuresDatabase"
+              },
+              "TableName": "energy-monitor-dev-measuresTable",
+              "RetentionProperties": {
+                "MemoryStoreRetentionPeriodInHours": 1,
+                "MagneticStoreRetentionPeriodInDays": 180
+              }
+            }
           }
         },
         "Outputs": {
@@ -532,7 +585,7 @@
           "MeterEndpointLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "MeterEndpointLambdaVersionS7jHRlE95XdV7V86fgLVDfaCHlOZ3ABy1NARgFsM3g"
+              "Ref": "MeterEndpointLambdaVersion9bOE9OyIipcD5S6f6MpK3lpI6vzpijdB72gi3zlrKhM"
             },
             "Export": {
               "Name": "sls-energy-monitor-dev-MeterEndpointLambdaFunctionQualifiedArn"
@@ -541,7 +594,7 @@
           "GetTableItemEndpointLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "GetTableItemEndpointLambdaVersionExMZVLIzFL7IWHSqdDcJsngX6zPjTMK2kIeF06X60qQ"
+              "Ref": "GetTableItemEndpointLambdaVersion0mKmG13845e39pmuncie87Ib92pHmRwWaq07O85fpc"
             },
             "Export": {
               "Name": "sls-energy-monitor-dev-GetTableItemEndpointLambdaFunctionQualifiedArn"
@@ -670,6 +723,8 @@
     "custom": {
       "prefix": "energy-monitor-dev",
       "logLevel": "DEBUG",
+      "measuresTableName": "energy-monitor-dev-measuresTable",
+      "measuresDBName": "energy-monitor-dev-measuresDB",
       "clientGroupMonitorTableName": "energy-monitor-dev-ClientGroupMonitorTable",
       "prune": {
         "automatic": true,
@@ -716,7 +771,7 @@
         "timeout": 6,
         "runtime": "python3.9",
         "vpc": {},
-        "versionLogicalId": "MeterEndpointLambdaVersionS7jHRlE95XdV7V86fgLVDfaCHlOZ3ABy1NARgFsM3g"
+        "versionLogicalId": "MeterEndpointLambdaVersion9bOE9OyIipcD5S6f6MpK3lpI6vzpijdB72gi3zlrKhM"
       },
       "getTableItemEndpoint": {
         "name": "energy-monitor-dev-getTableItemEndpoint",
@@ -739,7 +794,7 @@
         "timeout": 6,
         "runtime": "python3.9",
         "vpc": {},
-        "versionLogicalId": "GetTableItemEndpointLambdaVersionExMZVLIzFL7IWHSqdDcJsngX6zPjTMK2kIeF06X60qQ"
+        "versionLogicalId": "GetTableItemEndpointLambdaVersion0mKmG13845e39pmuncie87Ib92pHmRwWaq07O85fpc"
       }
     },
     "resources": {
@@ -769,6 +824,25 @@
             ],
             "BillingMode": "PAY_PER_REQUEST",
             "TableName": "energy-monitor-dev-ClientGroupMonitorTable"
+          }
+        },
+        "MeasuresDatabase": {
+          "Type": "AWS::Timestream::Database",
+          "Properties": {
+            "DatabaseName": "energy-monitor-dev-measuresDB"
+          }
+        },
+        "MeasuresTable": {
+          "Type": "AWS::Timestream::Table",
+          "Properties": {
+            "DatabaseName": {
+              "Ref": "MeasuresDatabase"
+            },
+            "TableName": "energy-monitor-dev-measuresTable",
+            "RetentionProperties": {
+              "MemoryStoreRetentionPeriodInHours": 1,
+              "MagneticStoreRetentionPeriodInDays": 180
+            }
           }
         }
       },
@@ -806,7 +880,7 @@
           "variables.js"
         ],
         "artifact": "/home/guillermo/Desktop/GaGaIoT/BackEnd/energy-monitor-back/sls/.serverless/energy-monitor.zip",
-        "artifactDirectoryName": "serverless/energy-monitor/dev/1694126156524-2023-09-07T22:35:56.524Z"
+        "artifactDirectoryName": "serverless/energy-monitor/dev/1702242722209-2023-12-10T21:12:02.209Z"
       },
       "functions": {
         "$ref": "$[\"service\"][\"functions\"]"
@@ -826,14 +900,15 @@
         "compatibleRuntimes": {
           "$ref": "$[\"service\"][\"provider\"][\"compiledCloudFormationTemplate\"][\"Resources\"][\"PythonRequirementsLambdaLayer\"][\"Properties\"][\"CompatibleRuntimes\"]"
         },
-        "package": {}
+        "package": {},
+        "artifactAlreadyUploaded": true
       }
     },
     "isDashboardMonitoringPreconfigured": false,
     "artifact": "/home/guillermo/Desktop/GaGaIoT/BackEnd/energy-monitor-back/sls/.serverless/energy-monitor.zip"
   },
   "package": {
-    "artifactDirectoryName": "serverless/energy-monitor/dev/1694126156524-2023-09-07T22:35:56.524Z",
+    "artifactDirectoryName": "serverless/energy-monitor/dev/1702242722209-2023-12-10T21:12:02.209Z",
     "artifact": "energy-monitor.zip"
   }
 }

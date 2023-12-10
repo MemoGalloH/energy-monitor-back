@@ -1,5 +1,4 @@
 import logging
-from datetime import datetime, timezone
 from src.data_structures.client_group_monitor import ClientGroupMonitor, MonitorItem
 
 
@@ -21,29 +20,15 @@ class DynamoHandler:
             logging.error(e)
             return None
 
-    def put_new_measure(self, data: ClientGroupMonitor):
+    def validate_new_measure(self, data: ClientGroupMonitor):
         isTheredata = self.get_item(data.cleint_id, data.get_monitor_ref())
         if isTheredata:
             monitorItem = MonitorItem(**isTheredata)
             if monitorItem.isActive:
                 if len(monitorItem.variables) == len(data.data):
-                    dt = datetime.now(timezone.utc)
-                    utc_time = dt.replace(tzinfo=timezone.utc)
-                    utc_timestamp = int(utc_time.timestamp())
-                    measure = {"timestamp": utc_timestamp, "values": data.data}
-                    response = self.table.update_item(
-                        Key={
-                            "clientId": monitorItem.clientId,
-                            "clientGroupMonitorId": monitorItem.clientGroupMonitorId,
-                        },
-                        UpdateExpression="set #measures = list_append(#measures, :measure)",
-                        ExpressionAttributeNames={"#measures": "measures"},
-                        ExpressionAttributeValues={":measure": [measure]},
-                        ReturnValues="UPDATED_NEW",
-                    )
-                    if response["ResponseMetadata"]["HTTPStatusCode"] == 200:
-                        logging.debug("A measurement record was added")
-                        return 200, "A measurement record was added."
+                    data.variables = monitorItem.variables
+                    logging.debug("Measure is valid.")
+                    return 200, "Measure is valid"
                 else:
                     logging.error(
                         "Non-coincidence between the number of measurements received and expected."

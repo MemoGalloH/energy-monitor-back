@@ -4,10 +4,13 @@ from typing import List
 
 @dataclass
 class ClientGroupMonitor:
+    """This class is used to represent the data that is sent to the endpoint"""
+
     cleint_id: str = None
     group_id: str = None
     monitor_id: str = None
     data: List = field(default_factory=list)
+    variables: List = field(default_factory=list)
 
     def get_client_ref(self):
         return "client"
@@ -24,7 +27,6 @@ class MonitorItem:
     clientId: str = None
     clientGroupMonitorId: str = None
     variables: List = field(default_factory=list)
-    measures: List = field(default_factory=list)
     isActive: bool = None
 
 

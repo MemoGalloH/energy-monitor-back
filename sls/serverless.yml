@@ -16,6 +16,9 @@ provider:
   profile: ${file(./../ci/variables.js):PROFILE}
 
   environment:
+    REGION_NAME: ${self:provider.region}
+    TIMESTREAM_MEASURES_TABLE: ${self:custom.measuresTableName}
+    TIMESTREAM_DB: ${self:custom.measuresDBName}
     LOG_LEVEL: ${self:custom.logLevel}
     CLIENT_GROUP_MONITOR_TABLE_NAME: ${self:custom.clientGroupMonitorTableName}
   iam:
@@ -55,6 +58,8 @@ resources:
 custom:
   prefix: ${self:service}-${self:provider.stage}
   logLevel: ${file(./../ci/variables.js):LOG_LEVEL}
+  measuresTableName: ${self:custom.prefix}-measuresTable
+  measuresDBName: ${self:custom.prefix}-measuresDB
   clientGroupMonitorTableName: ${self:custom.prefix}-ClientGroupMonitorTable
   prune:
     automatic: true
