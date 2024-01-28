@@ -154,6 +154,8 @@
                 {
                   "Effect": "Allow",
                   "Action": [
+                    "timestream:Select",
+                    "timestream:SelectValues",
                     "timestream:WriteRecords"
                   ],
                   "Resource": [
@@ -213,7 +215,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/energy-monitor/dev/1702242722209-2023-12-10T21:12:02.209Z/energy-monitor.zip"
+          "S3Key": "serverless/energy-monitor/dev/1706418470837-2024-01-28T05:07:50.837Z/energy-monitor.zip"
         },
         "Handler": "src/functions/meter_endpoint.lambda_handler",
         "Runtime": "python3.9",
@@ -252,7 +254,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/energy-monitor/dev/1702242722209-2023-12-10T21:12:02.209Z/energy-monitor.zip"
+          "S3Key": "serverless/energy-monitor/dev/1706418470837-2024-01-28T05:07:50.837Z/energy-monitor.zip"
         },
         "Handler": "src/functions/get_table_item_endpoint.lambda_handler",
         "Runtime": "python3.9",
@@ -284,24 +286,24 @@
         "GetTableItemEndpointLogGroup"
       ]
     },
-    "MeterEndpointLambdaVersion9bOE9OyIipcD5S6f6MpK3lpI6vzpijdB72gi3zlrKhM": {
+    "MeterEndpointLambdaVersionHtH1v6jHSXGV4qRHlqj5Mlqc0mV1ycEesiLjYsmL1k": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "MeterEndpointLambdaFunction"
         },
-        "CodeSha256": "tiqFYjNBrw4LPn1e3a5XVCEe4C2UWgO4ieH+Lt78wzI="
+        "CodeSha256": "sP8E11bFsP/PH7+GFtjxYe6LFEleb1dnrpfYMJmh3I8="
       }
     },
-    "GetTableItemEndpointLambdaVersion0mKmG13845e39pmuncie87Ib92pHmRwWaq07O85fpc": {
+    "GetTableItemEndpointLambdaVersionhg40mAeAjTITJemEFyHe9DZDFGCUEKSFFidUlJqON6A": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "GetTableItemEndpointLambdaFunction"
         },
-        "CodeSha256": "tiqFYjNBrw4LPn1e3a5XVCEe4C2UWgO4ieH+Lt78wzI="
+        "CodeSha256": "sP8E11bFsP/PH7+GFtjxYe6LFEleb1dnrpfYMJmh3I8="
       }
     },
     "HttpApi": {
@@ -556,7 +558,7 @@
     "MeterEndpointLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "MeterEndpointLambdaVersion9bOE9OyIipcD5S6f6MpK3lpI6vzpijdB72gi3zlrKhM"
+        "Ref": "MeterEndpointLambdaVersionHtH1v6jHSXGV4qRHlqj5Mlqc0mV1ycEesiLjYsmL1k"
       },
       "Export": {
         "Name": "sls-energy-monitor-dev-MeterEndpointLambdaFunctionQualifiedArn"
@@ -565,7 +567,7 @@
     "GetTableItemEndpointLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "GetTableItemEndpointLambdaVersion0mKmG13845e39pmuncie87Ib92pHmRwWaq07O85fpc"
+        "Ref": "GetTableItemEndpointLambdaVersionhg40mAeAjTITJemEFyHe9DZDFGCUEKSFFidUlJqON6A"
       },
       "Export": {
         "Name": "sls-energy-monitor-dev-GetTableItemEndpointLambdaFunctionQualifiedArn"

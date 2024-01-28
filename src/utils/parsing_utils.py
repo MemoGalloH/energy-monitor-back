@@ -34,13 +34,21 @@ def parse_input_measure(event: dict) -> ClientGroupMonitor:
 
 def parse_get_item_client_table(event: dict) -> tuple:
     path_paratmeters = event.get("pathParameters")
+    query_parameters = event.get("queryStringParameters")
     client_id = path_paratmeters.get("clientId")
     if not client_id:
         raise NoClientIdUrlError()
     client_group_monitor_id = path_paratmeters.get("clientGroupMonitorId")
     if not client_group_monitor_id:
         raise NoClientGroupMonitorIdError()
-    return client_id, client_group_monitor_id
+    return client_id, client_group_monitor_id, query_parameters
+
+
+def need_retrieve_data(client_group_monitor_id):
+    if client_group_monitor_id != "client":
+        if len(client_group_monitor_id.split(".")) == 2:
+            return True
+    return False
 
 
 def parse_table_client_data(data, client_group_monitor_id):

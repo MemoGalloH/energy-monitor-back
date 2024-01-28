@@ -64,32 +64,4 @@ class TimeStreamHandler:
         except Exception as err:
             print("Error:", err)
             traceback.print_exc()
-
-            a = [
-                {
-                    "Dimensions": [
-                        {"Name": "clientId", "Value": "1053779590"},
-                        {
-                            "Name": "groupId",
-                            "Value": "74f9ae48-36ce-4b4e-bdd3-3899fa886b02",
-                        },
-                        {
-                            "Name": "monitorId",
-                            "Value": "796b2cc2-b848-4e16-bf17-ff506b5d0602",
-                        },
-                    ],
-                    "MeasureName": "MeterMetrics",
-                    "MeasureValues": [
-                        {"Name": "V_A", "Value": "20.5", "Type": "DOUBLE"},
-                        {"Name": "I_A", "Value": "120.34", "Type": "DOUBLE"},
-                        {"Name": "PA_A", "Value": "117.28", "Type": "DOUBLE"},
-                        {"Name": "EA_A_I", "Value": "121.43", "Type": "DOUBLE"},
-                        {"Name": "F", "Value": "300.33", "Type": "DOUBLE"},
-                        {"Name": "FP_A", "Value": "304.33", "Type": "DOUBLE"},
-                    ],
-                    "MeasureValueType": "MULTI",
-                    "Time": "1702241361",
-                }
-            ]
-
             return 500, "It was not possible to add the measurement record."

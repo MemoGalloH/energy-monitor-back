@@ -9,6 +9,8 @@ statements:
 
   - Effect: Allow
     Action:
+      - 'timestream:Select'
+      - 'timestream:SelectValues'
       - 'timestream:WriteRecords'
     Resource:
       - 'arn:aws:timestream:${self:provider.region}:${aws:accountId}:database/${self:custom.measuresDBName}'
