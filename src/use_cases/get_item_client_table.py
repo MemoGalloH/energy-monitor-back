@@ -28,7 +28,6 @@ class GetItemClientTable:
                     )
                     group_id = client_group_monitor_id_splitted[0]
                     monitor_id = client_group_monitor_id_splitted[1]
-                    print("Rigth place")
                     time_stream_query = TimeStreamQueryHandler(
                         query_client, TIMESTREAM_DB, TIMESTREAM_MEASURES_TABLE
                     )
@@ -49,6 +48,12 @@ class GetItemClientTable:
                         parsed_measures = time_stream_query.get_last_day(
                             client_id, group_id, monitor_id, data.get("variables")
                         )
+                    if not parsed_measures:
+                        print("aca porque no hay datos")
+                        parsed_measures = time_stream_query.get_last_24_measures(
+                            client_id, group_id, monitor_id, data.get("variables")
+                        )
+                    print(parsed_measures)
                     data |= {"measures": parsed_measures}
                 status_code = 200
                 body = json.dumps(data)
@@ -60,4 +65,5 @@ class GetItemClientTable:
             traceback.print_exc()
             status_code = 500
             body = str(e)
+        print(body)
         return {"status_code": status_code, "body": body}

@@ -53,6 +53,26 @@ class TimeStreamQueryHandler:
         )
         return self.run_query(query)
 
+    def get_last_24_measures(self, client_id, group_id, monitor_id, variables):
+        query = (
+            "SELECT time, " + ", ".join(variables) + " "
+            "FROM "
+            + '"'
+            + self.database_name
+            + '"'
+            + "."
+            + '"'
+            + self.table_name
+            + '"'
+            + " "
+            "WHERE clientId=" + "'" + client_id + "'" + " "
+            "AND groupId=" + "'" + group_id + "'" + " "
+            "AND monitorId=" + "'" + monitor_id + "'" + " "
+            "ORDER BY time DESC "
+            "LIMIT 24"
+        )
+        return self.run_query(query)
+
     def run_query(self, query_string):
         try:
             page_iterator = self.paginator.paginate(QueryString=query_string)

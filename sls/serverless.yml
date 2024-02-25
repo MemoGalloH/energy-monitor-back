@@ -69,6 +69,8 @@ custom:
     fileName: ./../requirements.txt
     dockerizePip: true
     slim: true
+    #useDownloadCache: false
+    #useStaticCache: false
     layer:
       name: ${self:custom.prefix}-python-packages
       compatibleRuntimes:
