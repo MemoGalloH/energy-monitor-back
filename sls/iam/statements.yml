@@ -1,0 +1,22 @@
+statements:
+  - Effect: Allow
+    Action:
+      - dynamodb:GetItem
+      - dynamodb:GetItem
+      - dynamodb:UpdateItem
+      - dynamodb:DeleteItem
+    Resource: arn:aws:dynamodb:${self:provider.region}:${aws:accountId}:table/*
+
+  - Effect: Allow
+    Action:
+      - 'timestream:Select'
+      - 'timestream:SelectValues'
+      - 'timestream:WriteRecords'
+    Resource:
+      - 'arn:aws:timestream:${self:provider.region}:${aws:accountId}:database/${self:custom.measuresDBName}'
+      - 'arn:aws:timestream:${self:provider.region}:${aws:accountId}:database/${self:custom.measuresDBName}/*'
+  - Effect: Allow
+    Action:
+      - 'timestream:DescribeEndpoints'
+    Resource:
+      - '*'

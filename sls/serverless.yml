@@ -1,0 +1,77 @@
+service: energy-monitor
+
+frameworkVersion: ^4.4.7
+
+plugins:
+  - serverless-ignore
+  - serverless-prune-plugin
+  - serverless-python-requirements
+
+provider:
+  name: aws
+  runtime: python3.9
+
+  region: us-east-1 #${file(./../ci/variables.js):AWS_REGION}
+  stage: dev #${file(./../ci/variables.js):AWS_STAGE}
+  profile: default #${file(./../ci/variables.js):PROFILE}
+
+  environment:
+    REGION_NAME: ${self:provider.region}
+    TIMESTREAM_MEASURES_TABLE: ${self:custom.measuresTableName}
+    TIMESTREAM_DB: ${self:custom.measuresDBName}
+    LOG_LEVEL: ${self:custom.logLevel}
+    CLIENT_GROUP_MONITOR_TABLE_NAME: ${self:custom.clientGroupMonitorTableName}
+  iam:
+    role:
+      statements: ${file(./iam/statements.yml):statements}
+
+package: 
+  patterns:
+    - '!./**'
+    - './../src/**'
+
+functions:
+
+  meterEndpoint:
+    name: ${self:custom.prefix}-meterEndpoint
+    handler: src/functions/meter_endpoint.lambda_handler
+    events:
+      - httpApi:
+          path: /monitor/{monitorId}
+          method: post
+    layers:
+      - !Ref PythonRequirementsLambdaLayer
+
+  getTableItemEndpoint:
+    name: ${self:custom.prefix}-getTableItemEndpoint
+    handler: src/functions/get_table_item_endpoint.lambda_handler
+    events:
+      - httpApi:
+          path: /client/{clientId}/{clientGroupMonitorId}
+          method: get
+    layers:
+      - !Ref PythonRequirementsLambdaLayer
+
+resources:
+  - ${file(./resources/tables.yml)}
+
+custom:
+  prefix: ${self:service}-${self:provider.stage}
+  logLevel: DEBUG #${file(./../ci/variables.js):LOG_LEVEL}
+  measuresTableName: ${self:custom.prefix}-measuresTable
+  measuresDBName: ${self:custom.prefix}-measuresDB
+  clientGroupMonitorTableName: ${self:custom.prefix}-ClientGroupMonitorTable
+  prune:
+    automatic: true
+    includeLayers: true
+    number: 5
+  pythonRequirements:
+    fileName: ./../requirements.txt
+    dockerizePip: true
+    slim: true
+    #useDownloadCache: false
+    #useStaticCache: false
+    layer:
+      name: ${self:custom.prefix}-python-packages
+      compatibleRuntimes:
+        - ${self:provider.runtime}

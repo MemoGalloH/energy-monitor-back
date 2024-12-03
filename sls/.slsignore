@@ -1,0 +1,20 @@
+# Dependencies related
+node_modules/*
+package.json
+package-lock.json
+requirements.txt
+
+# Docs & Logs
+README.md
+*.log
+
+# Others
+DB_Model/*
+Webhook_Sender/*
+results.json
+
+# VS Code settings
+.vscode/*
+
+# Env. variables
+variables.js

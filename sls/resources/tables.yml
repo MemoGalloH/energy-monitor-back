@@ -1,0 +1,31 @@
+Resources:
+    # DynamoDB resources
+  ClientGroupMonitorTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+        - AttributeName: clientId
+          AttributeType: S
+        - AttributeName: clientGroupMonitorId
+          AttributeType: S
+      KeySchema:
+        - AttributeName: clientId
+          KeyType: HASH
+        - AttributeName: clientGroupMonitorId
+          KeyType: RANGE        
+      BillingMode: PAY_PER_REQUEST
+      TableName: ${self:custom.prefix}-ClientGroupMonitorTable
+
+  MeasuresDatabase:
+    Type: AWS::Timestream::Database
+    Properties:
+      DatabaseName: ${self:custom.prefix}-measuresDB
+
+  MeasuresTable:
+    Type: AWS::Timestream::Table
+    Properties:
+      DatabaseName: !Ref MeasuresDatabase
+      TableName: ${self:custom.prefix}-measuresTable
+      RetentionProperties:
+        MemoryStoreRetentionPeriodInHours: 1
+        MagneticStoreRetentionPeriodInDays: 180
