@@ -1,6 +1,6 @@
 service: energy-monitor
 
-frameworkVersion: ^3.26.0
+frameworkVersion: ^4.4.7
 
 plugins:
   - serverless-ignore
@@ -11,9 +11,9 @@ provider:
   name: aws
   runtime: python3.9
 
-  region: ${file(./../ci/variables.js):AWS_REGION}
-  stage: ${file(./../ci/variables.js):AWS_STAGE}
-  profile: ${file(./../ci/variables.js):PROFILE}
+  region: us-east-1 #${file(./../ci/variables.js):AWS_REGION}
+  stage: dev #${file(./../ci/variables.js):AWS_STAGE}
+  profile: default #${file(./../ci/variables.js):PROFILE}
 
   environment:
     REGION_NAME: ${self:provider.region}
@@ -57,7 +57,7 @@ resources:
 
 custom:
   prefix: ${self:service}-${self:provider.stage}
-  logLevel: ${file(./../ci/variables.js):LOG_LEVEL}
+  logLevel: DEBUG #${file(./../ci/variables.js):LOG_LEVEL}
   measuresTableName: ${self:custom.prefix}-measuresTable
   measuresDBName: ${self:custom.prefix}-measuresDB
   clientGroupMonitorTableName: ${self:custom.prefix}-ClientGroupMonitorTable
